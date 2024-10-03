@@ -1,0 +1,25 @@
+{
+  "name": "@s3react/mono",
+  "version": "1.0.0",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "new": "node ./scripts/project.mjs",
+    "lib": "node ./scripts/pack.mjs",
+    "start": "node ./scripts/start.mjs",
+    "dev": "node ./scripts/dev.mjs",
+    "build": "node ./scripts/build.mjs",
+    "lint": "node ./scripts/lint.mjs",
+    "typecheck": "node ./scripts/typecheck.mjs",
+    "eject": "node ./scripts/eject.mjs",
+    "in": "node ./scripts/add.mjs",
+    "rm": "node ./scripts/remove.mjs",
+    "rm-p": "node ./scripts/remove-project.mjs",
+    "rm-l": "node ./scripts/remove-lib.mjs",
+    "ln": "node ./scripts/link.mjs"
+  },
+  "devDependencies": {
+    "chalk": "^5.3.0"
+  },
+  "dependencies": {}
+}
