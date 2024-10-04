@@ -5,7 +5,7 @@ export const HeaderLayout: FC = () => {
   return (
     <div
       className={clsx(
-        "sticky top-0 z-50 w-full h-12 backdrop-blur flex border-b border-slate-50/[0.06] items-center px-[max(0px,calc(50%-45rem))]",
+        "fixed top-0 z-50 w-full h-12 backdrop-blur flex border-b border-slate-50/[0.06] items-center px-[max(0px,calc(50%-45rem))]",
         "bg-slate-900/75 shadow-white text-slate-100"
       )}
     >

@@ -1,62 +1,143 @@
-import { ComponentType, FC, MouseEvent, PropsWithChildren, ReactNode } from "react";
+import {
+  ComponentProps,
+  ElementType,
+  forwardRef,
+  ForwardRefRenderFunction,
+  PropsWithChildren,
+  PropsWithoutRef,
+  ReactElement,
+  ReactNode
+} from "react";
+import { PolymorphicComponentPropWithRef, PolymorphicRef } from "../types/component";
+import { Adornment } from "../Adornment";
+import { cx } from "../utils/cx";
 import clsx from "clsx";
 
-const menuItemSizes = {
-  xs: "h-8 min-h-[32px]",
-  sm: "h-10 min-h-[36px]",
-  md: "h-11 min-h-[44px]",
-  lg: "h-12 min-h-[48px]",
-  xl: "h-14 min-h-[56px]",
-};
-
-interface MenuItemBaseProps {
-  children?: ReactNode;
-  className?: string;
-  onClick?(e: MouseEvent<Element>): void;
-}
-
-export interface MenuItemProps {
+type MenuItemBaseProps = {
+  leftSection?: ReactNode;
+  rightSection?: ReactNode;
+  size?: 'xs' | 'sm' | 'base' | 'md' | 'lg' | 'xl';
+  value?: string | number;
   currentValue?: string | number;
-  value: string | number;
-  onClick?(e: MouseEvent<HTMLElement>, value?: string | number): void;
   disabled?: boolean;
-  size?: keyof typeof menuItemSizes;
-  component?: ComponentType<MenuItemBaseProps>;
-  className?: string;
-  activeClassName?: string;
-}
-
-export const MenuItem: FC<PropsWithChildren<MenuItemProps>> = (props) => {
-  const {
-    value,
-    currentValue,
-    size,
-    onClick,
-    component: Component = "button",
-    children,
-    className,
-    disabled,
-    activeClassName,
-  } = props;
-
-  const handleClick = (e: MouseEvent<HTMLElement>) => {
-    disabled || onClick?.(e, value);
+  secondary?: ReactNode;
+  componentClassName?: {
+    leftSection?: string;
+    rightSection?: string;
+    inner?: string;
+    primary?: string;
+    secondary?: string;
+    selected?: string;
+    disabled?: string;
   };
-
-  return (
-    <Component
-      className={clsx(
-        "flex items-center w-full px-4 text-left hover:bg-gray-100 cursor-pointer transition-colors",
-        "duration-150 ease-in-out truncate text-sm",
-        size ? menuItemSizes[size] : "h-10 min-h-[40px]",
-        className,
-        currentValue === value && "bg-gray-200",
-        currentValue === value && activeClassName
-      )}
-      onClick={handleClick}
-      disabled={disabled}
-    >
-      {children}
-    </Component>
-  );
 };
+
+export type MenuItemProps<C extends ElementType = 'button'> = PolymorphicComponentPropWithRef<C, MenuItemBaseProps>;
+
+type MenuItemComponent = <C extends ElementType = 'button'>(
+  props: PropsWithChildren<MenuItemProps<C>> & { ref?: PolymorphicRef<C> }
+) => ReactElement;
+
+export const menuItemClasses = {
+  root: cx("MenuItem-root"),
+  inner: cx("MenuItem-inner"),
+  base: cx("MenuItem-base"),
+  xs: cx("MenuItem-xs"),
+  sm: cx("MenuItem-sm"),
+  md: cx("MenuItem-md"),
+  lg: cx("MenuItem-lg"),
+  xl: cx("MenuItem-xl"),
+  selected: cx("MenuItem-selected"),
+  disabled: cx("MenuItem-disabled"),
+  primary: cx("MenuItem-primary"),
+  secondary: cx("MenuItem-secondary"),
+  leftSection: cx("MenuItem-leftSection"),
+  rightSection: cx("MenuItem-rightSection"),
+};
+
+export const MenuItem = forwardRef(
+  (<C extends ElementType = 'button'>(props: MenuItemProps<C>, ref: PolymorphicRef<C>) => {
+    const {
+      component: Component = "button",
+      renderRoot,
+      leftSection,
+      rightSection,
+      children,
+      size = 'base',
+      value,
+      currentValue,
+      disabled,
+      secondary,
+      componentClassName = {},
+      className,
+      ...rest
+    } = props;
+
+    const content = (
+      <>
+        {leftSection && (
+          <Adornment
+            component="span"
+            position="left"
+            className={clsx(menuItemClasses.leftSection, componentClassName.leftSection)}
+          >
+            {leftSection}
+          </Adornment>
+        )}
+        <span className={clsx(menuItemClasses.inner, componentClassName.inner)}>
+          <span className={clsx(menuItemClasses.primary, componentClassName.primary)}>
+            {children}
+          </span>
+          {secondary && (
+            <span className={clsx(menuItemClasses.secondary, componentClassName.secondary)}>
+              {secondary}
+            </span>
+          )}
+        </span>
+        {rightSection && (
+          <Adornment
+            component="span"
+            position="right"
+            className={clsx(menuItemClasses.rightSection, componentClassName.rightSection)}
+          >
+            {rightSection}
+          </Adornment>
+        )}
+      </>
+    );
+
+    const isSelected = value !== undefined && currentValue !== undefined && value === currentValue;
+
+    const rootClassName = clsx(
+      menuItemClasses.root,
+      menuItemClasses[size],
+      isSelected && menuItemClasses.selected,
+      isSelected && componentClassName.selected,
+      disabled && menuItemClasses.disabled,
+      disabled && componentClassName.disabled,
+      className
+    );
+
+    if (renderRoot) {
+      return renderRoot({
+        ...rest,
+        ref,
+        className: rootClassName,
+        children: content
+      } as PropsWithoutRef<ComponentProps<C>>);
+    }
+
+    const others: any = Component === "button" ? { type: "button" } : {};
+
+    return (
+      <Component 
+        {...rest}
+        {...others}
+        ref={ref}
+        className={rootClassName}
+      >
+        {content}
+      </Component>
+    );
+  }) as ForwardRefRenderFunction<unknown>
+) as MenuItemComponent;

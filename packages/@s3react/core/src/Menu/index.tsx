@@ -1,65 +1,83 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  ComponentType,
-  DetailedHTMLProps,
+  ElementType,
   forwardRef,
-  ForwardRefExoticComponent,
   ForwardRefRenderFunction,
-  ReactElement,
-  ReactNode,
-  Ref,
-  RefAttributes,
+  PropsWithChildren,
 } from "react";
+import { PolymorphicComponentPropWithRef, PolymorphicRef } from "../types/component";
+import { cx } from "@s3react/core/utils/cx";
 import clsx from "clsx";
 
-export interface MenuBaseProps {
-  children?: ReactNode;
-  className?: string;
-}
-
-type MenuComponent = keyof JSX.IntrinsicElements | ComponentType<any>;
-
-type InferComponentProps<T> = T extends keyof JSX.IntrinsicElements
-  ? JSX.IntrinsicElements[T]
-  : T extends ComponentType<infer P>
-  ? P
-  : never;
-
-type MenuProps<T extends MenuComponent = "div"> = InferComponentProps<T> & {
-  component?: T;
-  disablePadding?: boolean;
-  withBorder?: boolean;
+type MenuBaseProps = {
+  paddingY?: boolean;
+  paddingX?: boolean;
+  border?: boolean;
+  shadow?: boolean;
+  rounded?: boolean;
+  innerClassName?: string;
 };
 
-type MenuRef<T extends MenuComponent> = T extends keyof JSX.IntrinsicElements
-  ? JSX.IntrinsicElements[T] extends DetailedHTMLProps<React.HTMLAttributes<infer R>, any>
-    ? R
-    : never
-  : T extends ForwardRefExoticComponent<RefAttributes<infer R>>
-  ? R
-  : unknown;
+export type MenuProps<C extends ElementType = 'div'> =
+  PolymorphicComponentPropWithRef<C, PropsWithChildren<MenuBaseProps>>;
 
-type MenuComponentType = <T extends MenuComponent = "div">(
-  props: MenuProps<T> & RefAttributes<unknown>
-) => ReactElement | null;
+type MenuComponent = <C extends ElementType = 'div'>(
+  props: PropsWithChildren<MenuProps<C>> & { ref?: PolymorphicRef<C> }
+) => React.ReactElement | null;
 
-export const Menu: MenuComponentType = forwardRef((<T extends MenuComponent = "div">(
-  props: MenuProps<T>,
-  ref: Ref<MenuRef<T>>
-) => {
-  const { component: Component = "div", disablePadding, className, withBorder = true, children, ...rest } = props;
+export const menuClasses = {
+  root: cx("Menu-root"),
+  border: cx("Menu-border"),
+  shadow: cx("Menu-shadow"),
+  paddingY: cx("Menu-paddingY"),
+  paddingX: cx("Menu-paddingX"),
+  rounded: cx("Menu-rounded"),
+  inner: cx("Menu-inner"),
+};
+
+const MenuBase: ForwardRefRenderFunction<unknown, MenuProps<any>> = (props, ref) => {
+  const {
+    component: Component = "div",
+    renderRoot,
+    children,
+    paddingY = true,
+    paddingX = true,
+    border = true,
+    shadow = true,
+    rounded = true,
+    className,
+    innerClassName,
+    ...rest
+  } = props;
+  
+  const classes = clsx(
+    menuClasses.root,
+    border && menuClasses.border,
+    shadow && menuClasses.shadow,
+    paddingY && menuClasses.paddingY,
+    paddingX && menuClasses.paddingX,
+    rounded && menuClasses.rounded,
+    className
+  );
+
+  const content = (
+    <div className={clsx(menuClasses.inner, innerClassName)}>
+      {children}
+    </div>
+  );
+
+  if (renderRoot) {
+    return renderRoot({ ...rest, ref, className: classes, children: content });
+  }
+
   return (
-    <Component
+    <Component 
       {...rest}
       ref={ref}
-      className={clsx(
-        "flex flex-col bg-white rounded-md shadow-lg overflow-hidden",
-        withBorder && "border border-gray-200",
-        !disablePadding && "py-2",
-        className
-      )}
+      className={classes}
     >
-      {children}
+      {content}
     </Component>
   );
-}) as ForwardRefRenderFunction<unknown, any>) as any;
+};
+
+export const Menu = forwardRef(MenuBase) as MenuComponent;

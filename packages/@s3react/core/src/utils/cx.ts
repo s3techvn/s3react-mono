@@ -1,3 +1,5 @@
-export function cx(className: string) {
-  return `s3react-${className}`;
+import clsx from "clsx";
+
+export function cx(...classes: string[]) {
+  return clsx(classes.map((c) => c ? `s3react-${c}` : ""));
 }

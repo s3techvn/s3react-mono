@@ -1,6 +1,6 @@
 import { FocusEvent, forwardRef, InputHTMLAttributes, ReactNode, useState } from "react";
 import { InputLabel } from "@s3react/core/InputLabel";
-import { Adornment } from "@s3react/core/Adromnent";
+import { Adornment } from "@s3react/core/Adornment";
 import { HelperText } from "@s3react/core/HelperText";
 import clsx from "clsx";
 import { cx } from "../utils/cx";

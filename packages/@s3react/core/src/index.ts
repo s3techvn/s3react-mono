@@ -1,4 +1,4 @@
-export * from "./Adromnent";
+export * from "./Adornment";
 export * from "./Button";
 export * from "./Dropdown";
 export * from "./HelperText";
