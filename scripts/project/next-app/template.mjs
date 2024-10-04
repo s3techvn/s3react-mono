@@ -20,7 +20,7 @@ const tsconfig = `{
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@s3react/*": ["../../../packages/*/src"]
+      "@s3react/*": ["../../../packages/@s3react/*/src"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

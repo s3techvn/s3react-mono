@@ -41,7 +41,7 @@ const tsconfig = `{
     "baseUrl": ".",
     "paths": {
       "@/*": ["./app/*"],
-      "@s3react/*": ["../../../packages/*/src"]
+      "@s3react/*": ["../../../packages/@s3react/*/src"]
     },
 
     // Vite takes care of building everything, not tsc.

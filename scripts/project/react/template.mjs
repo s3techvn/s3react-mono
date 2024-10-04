@@ -24,7 +24,7 @@ const tsconfig = `{
       "./node_modules/@types"
     ],
     "paths": {
-      "@s3react/*": ["../../../../packages/*/src"]
+      "@s3react/*": ["../../../../packages/@s3react/*/src"]
     }
   },
   "include": [
