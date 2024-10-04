@@ -2,6 +2,7 @@ export * from "./Adromnent";
 export * from "./Button";
 export * from "./Dropdown";
 export * from "./HelperText";
+export * from "./ImageEditor";
 export * from "./Input";
 export * from "./InputLabel";
 export * from "./InputWrapper";
