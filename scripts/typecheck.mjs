@@ -23,12 +23,13 @@ if (!fs.existsSync(projectPath)) {
 
 const params = [projectPath, "&&", "yarn", "typecheck", ...rest];
 log.command(`cd ./projects/${mergedName} && yarn typecheck`);
+
 utils.command("cd", params)
   .then(() => {
     log.success('Typecheck completed');
     log.exit();
   })
-  .catch(() => {
-    log.error('Typecheck failed');
+  .catch((e) => {
+    log.error('Typecheck failed', e);
     log.exit();
   });

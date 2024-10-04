@@ -87,13 +87,12 @@ const interval = log.installing();
 utils.command("cd", params)
   .then(() => {
     clearInterval(interval);
-    log.breakLine();
     log.info("Dependencies installed");
     log.exit();
   })
-  .catch(() => {
+  .catch((e) => {
     clearInterval(interval);
-    log.breakLine();
     log.error("Failed to install dependencies");
+    log.error(e);
     log.exit();
   });

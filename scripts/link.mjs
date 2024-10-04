@@ -33,9 +33,6 @@ if (!fs.existsSync(projectPath)) {
   log.exit();
 }
 
-// const params = [projectPath, "&&", "yarn", "add", `../../../packages/${mergedPackage}`];
-// log.command(`cd ./projects/${mergedProject} && yarn add ../../../packages/${mergedPackage}`);
-
 const packageJson = JSON.parse(fs.readFileSync(path.join(projectPath, 'package.json'), 'utf8'));
 packageJson.dependencies = packageJson.dependencies || {};
 packageJson.dependencies[mergedPackage] = `../../../packages/${mergedPackage}`;
@@ -54,6 +51,7 @@ utils.command("cd", params)
   })
   .catch((e) => {
     clearInterval(interval);
-    log.error('Failed to link package', e);
+    log.error('Failed to link package');
+    log.error(e);
     log.exit();
   });

@@ -23,12 +23,14 @@ if (!fs.existsSync(projectPath)) {
 
 const params = [projectPath, "&&", "yarn", "eject", ...rest];
 log.command(`cd ./projects/${mergedName} && yarn eject`);
+
 utils.command("cd", params)
   .then(() => {
-    log.success('Project ejected');
+    log.info('Project ejected');
     log.exit();
   })
-  .catch(() => {
+  .catch((e) => {
     log.error('Failed to eject project');
+    log.error(e);
     log.exit();
   });

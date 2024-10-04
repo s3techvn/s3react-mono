@@ -31,13 +31,23 @@ export function command(cmd, params) {
 
     shell.stdout.on("data", (data) => {
       const message = data.toString();
-      log.breakLine();
-      log.message(typeof message === "object" ? JSON.stringify(message, undefined, 2) : message.toString());
+      log.message(message);
     });
 
     shell.stderr.on("data", (data) => {
       const message = data.toString();
-      reject(typeof message === "object" ? JSON.stringify(message, undefined, 2) : message.toString());
+
+      if (typeof message === "string" && message.trim().match(/^error/i)) {
+        reject(message);
+        return;
+      }
+
+      if (typeof message === "string" && message.trim().match(/^warning/i)) {
+        log.warning(message);
+        return;
+      }
+
+      log.info(message);
     });
   });
 }

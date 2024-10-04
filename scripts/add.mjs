@@ -23,12 +23,15 @@ if (!fs.existsSync(projectPath)) {
 
 const params = [projectPath, "&&", "yarn", "add", ...rest];
 log.command(`cd ./projects/${mergedName} && yarn add${rest.length ? ` ${rest.join(' ')}` : ''}`);
+
 utils.command("cd", params)
   .then(() => {
     log.success('Package added');
     log.exit();
   })
-  .catch(() => {
+  .catch((e) => {
     log.error('Failed to add package');
+    log.error(e);
     log.exit();
   });
+  

@@ -28,9 +28,10 @@ if (!rest.length) {
 
 const params = [projectPath, "&&", "yarn", "remove", ...rest];
 log.command(`cd ./projects/${mergedName} && yarn remove ${rest.join(' ')}`);
+
 utils.command("cd", params)
   .then(() => {
-    log.success('Packages removed');
+    log.info('Packages removed');
     log.exit();
   })
   .catch((e) => {

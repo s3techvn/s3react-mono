@@ -23,4 +23,8 @@ if (!fs.existsSync(projectPath)) {
 
 const params = [projectPath, "&&", "yarn", "start", ...rest];
 log.command(`cd ./projects/${mergedName} && yarn start`);
-utils.command("cd", params)
+
+utils.command("cd", params).catch((e) => {
+  log.error('Failed to start project', e);
+  log.exit();
+});

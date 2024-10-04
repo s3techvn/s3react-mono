@@ -23,12 +23,14 @@ if (!fs.existsSync(projectPath)) {
 
 const params = [projectPath, "&&", "yarn", "build", ...rest];
 log.command(`cd ./projects/${mergedName} && yarn build`);
+
 utils.command("cd", params)
   .then(() => {
-    log.success('Build completed');
+    log.info('Build completed');
     log.exit();
   })
-  .catch(() => {
+  .catch((e) => {
     log.error('Build failed');
+    log.error(e);
     log.exit();
   });
