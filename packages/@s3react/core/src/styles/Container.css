@@ -1,0 +1,23 @@
+.s3react-Container-root {
+  @apply container mx-auto;
+}
+
+.s3react-Container-sm {
+  @apply sm:!container sm:!mx-auto;
+}
+
+.s3react-Container-md {
+  @apply md:!container md:!mx-auto;
+}
+
+.s3react-Container-lg {
+  @apply lg:!container lg:!mx-auto;
+}
+
+.s3react-Container-xl {
+  @apply xl:!container xl:!mx-auto;
+}
+
+.s3react-Container-2xl {
+  @apply 2xl:!container 2xl:!mx-auto;
+}

@@ -1,11 +1,15 @@
 .s3react-Divider-root {
-  @apply flex items-center;
+  @apply flex items-center justify-center;
 }
 
-.s3react-Divider-horizontal {
+.s3react-Divider-root.s3react-Divider-horizontal {
+  @apply w-full;
+}
+
+.s3react-Divider-horizontal>.s3react-Divider-divider {
   @apply w-full my-2 border-t border-slate-500;
 }
 
-.s3react-Divider-vertical {
+.s3react-Divider-vertical>.s3react-Divider-divider {
   @apply h-full mx-2 border-l border-slate-500;
 }

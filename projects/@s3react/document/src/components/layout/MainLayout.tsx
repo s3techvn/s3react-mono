@@ -4,6 +4,7 @@ import { FC, PropsWithChildren } from "react";
 import { HeaderLayout } from "./HeaderLayout";
 import { BackgroundLayout } from "./BackgroundLayout";
 import { SidebarLayout } from "./SidebarLayout";
+import { BodyLayout } from "./BodyLayout";
 
 export const MainLayout: FC<PropsWithChildren> = (props) => {
   const { children } = props;
@@ -13,7 +14,9 @@ export const MainLayout: FC<PropsWithChildren> = (props) => {
       <HeaderLayout />
       <BackgroundLayout />
       <SidebarLayout />
-      {children}
+      <BodyLayout>
+        {children}
+      </BodyLayout>
     </>
   );
 };
